@@ -1,0 +1,50 @@
+# import directories
+import arcpy
+from arcpy.sa import *
+from arcpy.ia import *
+import os
+import json
+print("imported modules")
+
+# establish parameters
+# set master workspace and overwrite conditions
+arcpy.env.workspace = "C:\\Users\\Emma Tyrrell\\Documents\\PSU_SDS\\THESIS_230226"
+gdbName = (arcpy.env.workspace + "\\Data\\StaticDataGDB.gdb")
+projectBoundary = (gdbName +"\\ProjectBoundary")
+mosaicBit = 1
+mosaicPixelType = "32_BIT_FLOAT"
+GCSsr = arcpy.SpatialReference(4326)
+PCSsr = arcpy.SpatialReference(6432)
+arcpy.env.overwriteOutput = True
+arcpy.env.qualifiedFieldNames = False
+print("master parameters established")
+
+# set terrain data workspace
+terrainDataFilesWorkspace = (arcpy.env.workspace + "\\Data\\TerrainData")
+slopeOutputFiles = (terrainDataFilesWorkspace + "\\SlopeOutputFiles")
+aspectOutputFiles = (terrainDataFilesWorkspace + "\\AspectOutputFiles")
+demFiles = (arcpy.env.workspace + "\\Data\\DEM")
+mosaicAspectName = "aspectMosaic"
+mosaicSlopeName = "slopeMosaic"
+print("terrain parameters established")
+
+# set avy data workspace
+AvyDataWorkspace = (arcpy.env.workspace + "\\Data\\AvyData")
+AvyDataTable = (AvyDataWorkspace + "\\2022\\CAICAvyExplorer_Jan22.csv")
+xField = "X_Coord"
+yField = "Y_Coord"
+outAvyPointClass = (AvyDataWorkspace + "\\AvyPointClass.shp")
+projectedAvyOutPointClass = (AvyDataWorkspace + "\\AvyPointClass_projected.shp")
+avyPointClipped = (gdbName + "\\MasterAvyPointClass")
+masterAvyPointClass = (gdbName + "\\MasterAvyPointClass")
+print("avy parameters established")
+
+# hrrr model parameters
+hrrrDataWorkspace = (arcpy.env.workspace + "\\Data\\HRRR")
+hrrrMosaicDataset = "Jan2022HRRR"
+Jan2022Workspace = (hrrrDataWorkspace + "\\012022")
+outVariablesJan2022HRRR = (Jan2022Workspace + "\\OutVariables")
+hrrr01012022MDfile = (Jan2022Workspace + "\\hrrr.t00z.wrfsfcf24.grib2")
+hrrrModelVaribles = ["ASNOW@SFC", "CSNOW@SFC", "GUST@SFC", "PRATE@SFC", "SFCR@SFC", "SNOD@SFC", "SNOC@SFC", "TCDC@BCY",
+                     "TCDC@EATM", "TMP@SFC", "VEG@SFC", "WIND@HTGL"]
+print("hrrr model parameters established")
